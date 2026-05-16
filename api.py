@@ -1,9 +1,9 @@
-from fastapi import FastAPI
+from fastapi import APIRouter, FastAPI
 from pydantic import BaseModel
 from typing import List
-from main import salvar_tarefa
+from uteis import salvar_tarefa
 
-app = FastAPI()
+router = APIRouter()
 
 class Tarefaapi(BaseModel):
     tarefa: str
@@ -12,11 +12,11 @@ class Tarefaapi(BaseModel):
      
 
 
-@app.get("/")
+@router.get("/")
 def boa_vindas():
     return {"mensagem": "Organizador de tarefas"}
 
-@app.post("/tarefas")
+@router.post("/tarefas")
 #Envia a tarefa ao main
 def criar_tarefa(dados: Tarefaapi):
     nova_tarefa_dict = dados.model_dump() 

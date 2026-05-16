@@ -1,5 +1,14 @@
-import json
-import os
+from fastapi import FastAPI
+from api import router as api_router
+from uteis import salvar_tarefa
+from uteis import exibir_tarefa
+from uteis import sair_programa
+
+
+app = FastAPI()
+app.include_router(api_router)
+
+
 
 class Tarefa:
     def __init__(self, tarefa, importancia, descricao):
@@ -16,30 +25,33 @@ class Tarefa:
             "importancia": self.importancia,
             "descricao": self.descricao
         }
+    
 
-
-def salvar_tarefa(nome_arquivo, minha_tarefa):
-    nome_arquivo = "tarefas.json"
-    if os.path.exists(nome_arquivo) and os.path.getsize(nome_arquivo) > 0:
-        with open(nome_arquivo, "r", encoding="utf-8") as arquivo:
-            lista_de_tarefas = json.load(arquivo)
-    else:
-        lista_de_tarefas = []
-
-
-    lista_de_tarefas.append(minha_tarefa)
-
-    with open(nome_arquivo, "w", encoding="utf-8") as arquivo:
-        json.dump(lista_de_tarefas, arquivo, indent=4, ensure_ascii=False)
+    
 
 if __name__ == "__main__":
-    tarefa = input('Digite uma tarefa: ')
-    grau_de_importancia = input('Qual é o grau de importancia: ')
-    descricao = input('Qual e a sua descricao: ')
+    while True:     
+        escolha_usuario = int(input('\nO que voce deseja escolher ? \n(1) Salvar Tarefa \n(2) Ver tarefas \n(3) Sair do programa'))
 
-    minha_tarefa = Tarefa(tarefa, grau_de_importancia, descricao)
-    salvar_tarefa("tarefas.json", minha_tarefa.para_dict())
-    print('Tarefa salva com sucesso pelo terminal!')
+        if escolha_usuario == 1:
+            tarefa = input('\nDigite uma tarefa: ')
+            grau_de_importancia = input('\nQual é o grau de importancia: ')
+            descricao = input('\nQual e a sua descricao: ')
+
+            minha_tarefa = Tarefa(tarefa, grau_de_importancia, descricao)
+            salvar_tarefa("tarefas.json", minha_tarefa.para_dict())
+            print('Tarefa salva com sucesso pelo terminal!')
+        
+        elif escolha_usuario == 2:
+            exibir_tarefa()
+        
+        elif escolha_usuario == 3:
+            sair_programa()
+    
+    
+    
+    
+
 
 
 
